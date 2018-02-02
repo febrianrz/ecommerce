@@ -17,15 +17,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.febrian.ecomerce.Fragment.BerandaFragment;
 import com.example.febrian.ecomerce.Fragment.KategoriFragment;
+import com.example.febrian.ecomerce.Libraries.Auth;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private String titleBeranda = "Beranda";
+    private TextView tvNavHeaderEmail;
+    private ImageView ivIcon;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +55,31 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header         = navigationView.getHeaderView(0);
+        tvNavHeaderEmail    = (TextView) header.findViewById(R.id.tvEmail);
+        ivIcon              = (ImageView) header.findViewById(R.id.ivIcon);
+        setDrawer();
 
         BerandaFragment berandaFragment = new BerandaFragment();
         callFragment(berandaFragment, titleBeranda);
+    }
+
+    //setting nama di navigation drawer
+    private void setDrawer(){
+        Menu navMenu = navigationView.getMenu();
+        if(Auth.isLogin(MainActivity.this)){
+            tvNavHeaderEmail.setText(Auth.getUser(MainActivity.this).getEmail());
+            ivIcon.setImageResource(R.drawable.icon_happy);
+            navMenu.findItem(R.id.nav_login).setVisible(false);
+            navMenu.findItem(R.id.nav_register).setVisible(false);
+        } else {
+            tvNavHeaderEmail.setText("Anda Belum Login");
+            ivIcon.setImageResource(R.drawable.ic_launcher_background);
+            navMenu.findItem(R.id.nav_login).setVisible(true);
+            navMenu.findItem(R.id.nav_register).setVisible(true);
+        }
     }
 
     @Override
