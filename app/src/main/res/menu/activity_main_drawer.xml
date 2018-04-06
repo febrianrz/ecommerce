@@ -20,6 +20,16 @@
             android:id="@+id/nav_child"
             android:icon="@drawable/ic_child_care_black_24dp"
             android:title="Pakaian Anak" />
+
+        <item
+            android:id="@+id/nav_chart"
+            android:icon="@mipmap/ic_keranjang"
+            android:title="Keranjang Belanja" />
+
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@mipmap/ic_chat"
+            android:title="Chatting" />
     </group>
 
     <item android:title="">

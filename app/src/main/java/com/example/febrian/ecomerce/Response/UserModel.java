@@ -1,13 +1,19 @@
 package com.example.febrian.ecomerce.Response;
 
+import android.graphics.Bitmap;
+
+import com.github.bassaer.chatmessageview.model.IChatUser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by febrian on 02/02/18.
  */
 
-public class UserModel {
+public class UserModel implements IChatUser {
     @SerializedName("guid")
     @Expose
     private String guid;
@@ -51,5 +57,28 @@ public class UserModel {
 
     public void setTelepon(String telepon) {
         this.telepon = telepon;
+    }
+
+    @NotNull
+    @Override
+    public String getId() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Bitmap getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIcon(Bitmap bitmap) {
+
     }
 }

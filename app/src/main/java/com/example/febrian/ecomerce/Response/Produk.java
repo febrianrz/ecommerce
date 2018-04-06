@@ -29,9 +29,40 @@ public class Produk {
     @SerializedName("deskripsi")
     @Expose
     private String deskripsi;
+    @SerializedName("gambar")
+    @Expose
+    private String gambar;
+
+    private String jumlah;
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
+    private String keterangan;
+
+    public String getJumlah() {
+        return jumlah;
+    }
+
+    public void setJumlah(String jumlah) {
+        this.jumlah = jumlah;
+    }
 
     public String getId() {
         return id;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
     }
 
     public void setId(String id) {

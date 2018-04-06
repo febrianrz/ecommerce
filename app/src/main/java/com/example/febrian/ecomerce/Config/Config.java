@@ -12,6 +12,8 @@ public class Config {
 
     public static String KATALOG_PRIA = "1e2d58fc7d6e5126960b5d4fa5e6d968";
     public static String KATALOG_WANITA = "a9dfcdefec2b5ec5a3baab60418d1324";
-    public static String KATALOG_ANAK   = "a9dfcdefec2b5ec5a3baab60418d1324";
+    public static String KATALOG_ANAK   = "c3fa81376be15fb19cd4138c4c983c6d";
 
+    public static String DATABASE_NAME = "ecommerce";
+    public static int DATABASE_VERSION = 2;
 }

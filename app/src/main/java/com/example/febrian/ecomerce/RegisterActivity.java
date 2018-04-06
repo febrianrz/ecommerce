@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.febrian.ecomerce.Config.Config;
 import com.example.febrian.ecomerce.Response.Register;
+import com.example.febrian.ecomerce.Response.UserModel;
 import com.example.febrian.ecomerce.Service.Authentication;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -46,6 +47,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void doRegister(String email, String password, String nama, boolean useValidation){
+    private void doRegister(String email, String password, final String nama, boolean useValidation){
         boolean validation = useValidation ? validation() : true;
 
         if(!validation){
@@ -165,8 +167,15 @@ public class RegisterActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("Firebase Message: ", "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
-//                                Toast.makeText(RegisterActivity.this,"Registrasi Berhasil",Toast.LENGTH_LONG)
-//                                        .show();
+                                UserModel userModel = new UserModel();
+                                userModel.setNama(user.getDisplayName());
+                                userModel.setEmail(user.getEmail());
+                                userModel.setGuid(user.getUid());
+                                FirebaseDatabase.getInstance()
+                                        .getReference()
+                                        .child("users")
+                                        .push()
+                                        .setValue(userModel);
                                 doRegisterServerApp(user.getDisplayName(),user.getEmail(),user.getUid());
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -209,6 +218,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<Register> call, Response<Register> response) {
                 progressDialog.dismiss();
                 Register registerResponse = response.body();
+
                 Toast.makeText(RegisterActivity.this,registerResponse.getMsg(),
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);

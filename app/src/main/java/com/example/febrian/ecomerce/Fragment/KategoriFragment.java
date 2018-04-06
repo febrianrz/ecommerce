@@ -3,15 +3,21 @@ package com.example.febrian.ecomerce.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.febrian.ecomerce.Adapter.KatergoriAdapter;
 import com.example.febrian.ecomerce.Config.Config;
 import com.example.febrian.ecomerce.R;
 import com.example.febrian.ecomerce.Response.Produk;
 import com.example.febrian.ecomerce.Service.Transaksi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -29,21 +35,37 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class KategoriFragment extends Fragment {
 
+    private View rootView;
+    private RecyclerView rvProduk;
+    private RecyclerView.Adapter recylerAdapter;
+    private RecyclerView.LayoutManager recylerLayoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
+    // getArguments().getString("idPelajar");
     public KategoriFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        rootView            = inflater.inflate(R.layout.fragment_kategori, container, false);
+        rvProduk            = (RecyclerView) rootView.findViewById(R.id.rvProduk);
+        swipeRefreshLayout  = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
+
         loadData();
-        return inflater.inflate(R.layout.fragment_kategori, container, false);
+        return rootView;
     }
 
     private void loadData(){
+        swipeRefreshLayout.setRefreshing(true);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -65,12 +87,18 @@ public class KategoriFragment extends Fragment {
         requestCall.enqueue(new Callback<List<Produk>>() {
             @Override
             public void onResponse(Call<List<Produk>> call, Response<List<Produk>> response) {
-
+                swipeRefreshLayout.setRefreshing(false);
+                recylerLayoutManager = new GridLayoutManager(getContext(),2);
+//                recylerLayoutManager =  new LinearLayoutManager(getContext());
+                rvProduk.setHasFixedSize(true);
+                rvProduk.setLayoutManager(recylerLayoutManager);
+                recylerAdapter =  new KatergoriAdapter(getContext(),response.body());
+                rvProduk.setAdapter(recylerAdapter);
             }
 
             @Override
             public void onFailure(Call<List<Produk>> call, Throwable t) {
-
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

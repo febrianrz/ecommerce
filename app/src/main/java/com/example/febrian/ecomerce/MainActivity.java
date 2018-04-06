@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        fab.setVisibility(View.GONE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -128,6 +129,9 @@ public class MainActivity extends AppCompatActivity
             callFragment(fragment,titleBeranda);
         } else if (id == R.id.nav_woman) {
             fragment = new KategoriFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("idPelajar","");
+            fragment.setArguments(bundle);
             callFragment(fragment, "Pakaian Wanita");
         } else if (id == R.id.nav_men) {
             fragment = new KategoriFragment();
@@ -161,8 +165,13 @@ public class MainActivity extends AppCompatActivity
                 }
             });
             builder.show();
+        } else if(id == R.id.nav_chart){
+            Intent i = new Intent(getApplicationContext(),KeranjangActivity.class);
+            startActivity(i);
+        } else if(id == R.id.nav_chat){
+            Intent i = new Intent(getApplicationContext(),ListChattingActivity.class);
+            startActivity(i);
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
